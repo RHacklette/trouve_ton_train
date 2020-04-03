@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
 from zeep import Client
 from flask import Flask, request, render_template
-from flask_restful import Resource, Api, reqparse
+
 #import keyring
 import requests
 from datetime import datetime, date, time
     
 app = Flask(__name__)
-api = Api(app)
-parser = reqparse.RequestParser()
-parser.add_argument('distance')
-parser.add_argument('devise')
+
 
 @app.route('/')
 def index():
@@ -31,7 +28,7 @@ def Calcul():
         
         distance = Calcul_distance(town1,town2)
         
-        http_rest="http://127.0.0.1:5000/CalculPrix"
+        http_rest="http://trouve-ton-train-rest.herokuapp.com/CalculPrix"
         response = requests.get( http_rest, params =  {'distance' : float(distance), 'devise' : 'euro'})
         prixtrajet = response.json()
         
@@ -98,16 +95,5 @@ def convert_time(dt) :
 def convertir_str(chaine) :
     ''' on convertit en date la chaine de caractères de l API'''
     return datetime.strptime(chaine.replace('T',''),'%Y%m%d%H%M%S')
-
-class CalculPrix(Resource):
-    def get(self):
-        parser.add_argument('task')
-        args = parser.parse_args()
-        
-        prix = float(args['distance']) * 0.25
-        
-        return {'prix' : prix}
-
-api.add_resource(CalculPrix, '/CalculPrix')
     
-app.run(debug='true')
+#app.run(debug='true')
