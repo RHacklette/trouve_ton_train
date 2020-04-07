@@ -25,11 +25,12 @@ def Calcul():
         town2 = result['town2']
         daydepart = result['daydepart']
         timedepart = result['timedepart']
+        devise = result['devise']
         
         distance = Calcul_distance(town1,town2)
         
         http_rest="http://trouve-ton-train-rest.herokuapp.com/CalculPrix"
-        response = requests.get( http_rest, params =  {'distance' : float(distance), 'devise' : 'euro'})
+        response = requests.get( http_rest, params =  {'distance' : float(distance), 'devise' : devise })
         prixtrajet = response.json()
         
         departure=daydepart+" "+timedepart
@@ -42,10 +43,13 @@ def Calcul():
         
         nexttrain = Next_train(town1,town2,datetimesncf)
         
-        for train in nexttrain:
-            u = u+1
-            deptrain = convertir_str(train)
-            tabdeparttrain.append("Train numero "+str(u)+", départ le: "+str(deptrain))
+        if nexttrain == "error":
+            tabdeparttrain.append("Aucun train trouvé ou disponible")
+        else :
+            for train in nexttrain:
+                u = u+1
+                deptrain = convertir_str(train)
+                tabdeparttrain.append("Train numero "+str(u)+", départ le: "+str(deptrain))
         
         return render_template("result.html", result=round(distance,2), prix=round(prixtrajet['prix'],2), tableau=tabdeparttrain)
 
@@ -80,12 +84,17 @@ def Next_train(town1,town2,datetimesncf) :
     payload = {'from': 'stop_area:OCE:SA:'+str(UIC1), 'to': 'stop_area:OCE:SA:'+str(UIC2), 'min_nb_journeys': 5, 'datetime': datetimesncf}
     api_get_train = requests.get('https://api.sncf.com/v1/coverage/sncf/journeys?', params=payload, auth=(token_auth, '')).json()
     
-    tabtrain = []
-
     
-    for i in range(0,5):
-        tabtrain.append(api_get_train['journeys'][i]['departure_date_time'])
 
+    if 'error' in api_get_train:
+        tabtrain="error"
+    else:
+        tabtrain = []
+        n = len(api_get_train['journeys'])
+        if n > 0:
+            for i in range(0, n):
+                tabtrain.append(api_get_train['journeys'][i]['departure_date_time'])
+       
     return(tabtrain)
 
 def convert_time(dt) :
