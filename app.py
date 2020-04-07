@@ -51,7 +51,7 @@ def Calcul():
                 deptrain = convertir_str(train)
                 tabdeparttrain.append("Train numero "+str(u)+", départ le: "+str(deptrain))
         
-        return render_template("result.html", result=round(distance,2), prix=round(prixtrajet['prix'],2), tableau=tabdeparttrain)
+        return render_template("result.html", result=round(distance,2), prix=round(prixtrajet['prix'],2), devise=devise, tableau=tabdeparttrain)
 
 def Calcul_distance(town1,town2) :
     url_town1 = 'https://data.sncf.com/api/records/1.0/search/?dataset=referentiel-gares-voyageurs&q=' + town1
