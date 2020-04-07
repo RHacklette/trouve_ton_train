@@ -63,7 +63,7 @@ def Calcul_distance(town1,town2) :
     long_town2 = api_town2['records'][0]['fields']['wgs_84'][1]
     
     client = Client('https://trouve-ton-train-java-soap.herokuapp.com/services/TchouTchou?wsdl')
-    result = client.service.calcul(long_town1, long_town2, lat_town1, lat_town2)
+    result = client.service.calculDistance(long_town1, long_town2, lat_town1, lat_town2)
     return(result)
     
 def Next_train(town1,town2,datetimesncf) :
