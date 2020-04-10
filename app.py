@@ -18,6 +18,10 @@ def formCalcul():
     listgare = List_Gare()
     return render_template("formCalcul.html", listgare=listgare)
 
+@app.route('/formCalculsimple')
+def formCalculsimple():
+    return render_template("formCalculsimple.html")
+
 @app.route('/Calcul', methods=['GET','POST'])
 def Calcul():
     if request.method == 'POST':
@@ -53,20 +57,39 @@ def Calcul():
                 tabdeparttrain.append("Train numero "+str(u)+", départ le: "+str(deptrain))
         
         return render_template("result.html", result=round(distance,2), prix=round(prixtrajet['prix'],2), devise=devise, tableau=tabdeparttrain)
-
-def List_Gare() :
-    #token_auth = '5e044075-940e-4989-87ba-202e60af9e75'
-    url = 'https://data.sncf.com/api/records/1.0/search/?dataset=referentiel-gares-voyageurs&key=5e044075-940e-4989-87ba-202e60af9e75'
-    api_get_gare = requests.get(url).json()
-
-    tabgare = []
-    n = len(api_get_gare['records'])
-    if n > 0:
-         for i in range(0, n):
-             tabgare.append(api_get_gare['records'][i]['fields']['gare_alias_libelle_noncontraint'])
-       
-    return(tabgare)
     
+def List_Gare() :
+    page_initiale = page_gares(0)
+    item_per_page = page_initiale.json()['pagination']['items_per_page']
+    total_items = page_initiale.json()['pagination']['total_result']
+    dfs = []
+    
+    # on fait une boucle sur toutes les pages suivantes
+    print_done = {}
+    
+    for page in range(int(total_items/item_per_page)+1) :
+        stations_page = page_gares(page)
+    
+        ensemble_stations = stations_page.json()
+    
+        if 'stop_areas' not in ensemble_stations:
+            # pas d'arrêt
+            continue
+    
+        # on ne retient que les informations qui nous intéressent
+        for station in ensemble_stations['stop_areas']:
+    
+            if 'administrative_regions' in station.keys() :
+                dfs.append(station['administrative_regions'][0]['name'])
+                    
+        stations = ensemble_stations['stop_areas']
+        
+    return(dfs)
+        
+    
+def page_gares(numero_page) :
+    token_auth = '5e044075-940e-4989-87ba-202e60af9e75'
+    return requests.get(('https://api.sncf.com/v1/coverage/sncf/stop_areas?start_page={}').format(numero_page),auth=(token_auth, ''))
     
 def Calcul_distance(town1,town2) :
     url_town1 = 'https://data.sncf.com/api/records/1.0/search/?dataset=referentiel-gares-voyageurs&q="' + town1+'"'

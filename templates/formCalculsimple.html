@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Formulaire calcul</title>
+</head>
+<body>
+<form action="/Calcul" method="post">
+    <p>Ville de départ :</p><input type="text" name="town1"><br><br>
+    <p>Ville d'arrivée :</p><input type="town2" name="town2"><br><br>
+    <p>Jour de départ :</p><input type="date" name="daydepart"><br><br>
+    <label>Heure de départ: </label>
+	<input type="time" name="timedepart" value="13:30"><br><br>
+	<label>Dans quelle devise :</label>
+  	<select name="devise">
+    	<option value="euro">Euros</option>
+    	<option value="gbp">Pounds</option>
+    	<option value="aud">Dollars Australien</option>
+    	<option value="usd">Dollars Americains</option>
+  </select>
+    <input type="submit">
+</form>
+</body>
+</html>
