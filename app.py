@@ -15,7 +15,8 @@ def index():
 
 @app.route('/formCalcul')
 def formCalcul():
-    return render_template("formCalcul.html")
+    listgare = List_Gare()
+    return render_template("formCalcul.html", listgare=listgare)
 
 @app.route('/Calcul', methods=['GET','POST'])
 def Calcul():
@@ -53,6 +54,24 @@ def Calcul():
         
         return render_template("result.html", result=round(distance,2), prix=round(prixtrajet['prix'],2), devise=devise, tableau=tabdeparttrain)
 
+def List_Gare() :
+    token_auth = '5e044075-940e-4989-87ba-202e60af9e75'
+
+    api_get_gare = requests.get('https://data.sncf.com/api/records/1.0/search/?dataset=referentiel-gares-voyageurs?', auth=(token_auth, '')).json()
+   
+    
+    if 'error' in api_get_gare:
+        tabgare="error"
+    else:
+        tabgare = []
+        n = len(api_get_gare['records'])
+        if n > 0:
+            for i in range(0, n):
+                tabgare.append(tabgare['records'][i]['fields']['gare_alias_libelle_noncontraint'])
+       
+    return(tabgare)
+    
+    
 def Calcul_distance(town1,town2) :
     url_town1 = 'https://data.sncf.com/api/records/1.0/search/?dataset=referentiel-gares-voyageurs&q=' + town1
     url_town2 = 'https://data.sncf.com/api/records/1.0/search/?dataset=referentiel-gares-voyageurs&q=' + town2
@@ -74,8 +93,8 @@ def Next_train(town1,town2,datetimesncf) :
     token_auth = '5e044075-940e-4989-87ba-202e60af9e75'
     #token_auth = keyring.get_password("sncf", "ensae_teaching_cs,key")
     #https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:OCE:SA:87746008&to=stop_area:OCE:SA:87722025&datetime=20200317T112327&key=%275e044075-940e-4989-87ba-202e60af9e75a%27
-    url_town1 = 'https://data.sncf.com/api/records/1.0/search/?dataset=referentiel-gares-voyageurs&q=' + town1
-    url_town2 = 'https://data.sncf.com/api/records/1.0/search/?dataset=referentiel-gares-voyageurs&q=' + town2
+    url_town1 = 'https://data.sncf.com/api/records/1.0/search/?dataset=referentiel-gares-voyageurs&q="' + town1+'"'
+    url_town2 = 'https://data.sncf.com/api/records/1.0/search/?dataset=referentiel-gares-voyageurs&q="' + town2+'"'
     api_town1 = requests.get(url_town1).json()
     api_town2 = requests.get(url_town2).json()
     UIC1 = api_town1['records'][0]['fields']['pltf_uic_code']

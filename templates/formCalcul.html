@@ -5,8 +5,18 @@
 </head>
 <body>
 <form action="/Calcul" method="post">
-    <p>Ville de départ :</p><input type="text" name="town1">
-    <p>Ville d'arrivée :</p><input type="town2" name="town2">
+    <p>Ville de départ :</p>
+    <select name=town1 method="GET">
+        {% for gare in listgare %}
+        <option value= "{{gare}}" SELECTED>{{gare}}</option>"
+        {% endfor %}
+    </select>
+    <p>Ville d'arrivée :</p>
+    <select name=town2 method="GET">
+        {% for gare in listgare %}
+        <option value= "{{gare}}" SELECTED>{{gare}}</option>"
+        {% endfor %}
+    </select>
     <p>Jour de départ :</p><input type="date" name="daydepart"><br><br>
     <label>Heure de départ: </label>
 	<input type="time" name="timedepart" value="13:30"><br><br>
