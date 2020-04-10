@@ -63,7 +63,7 @@ def List_Gare() :
     n = len(api_get_gare['records'])
     if n > 0:
          for i in range(0, n):
-             tabgare.append(tabgare['records'][i]['fields']['gare_alias_libelle_noncontraint'])
+             tabgare.append(api_get_gare['records'][i]['fields']['gare_alias_libelle_noncontraint'])
        
     return(tabgare)
     
