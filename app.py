@@ -57,7 +57,7 @@ def Calcul():
 def List_Gare() :
     token_auth = '5e044075-940e-4989-87ba-202e60af9e75'
 
-    api_get_gare = requests.get('https://data.sncf.com/api/records/1.0/search/?dataset=referentiel-gares-voyageurs?', auth=(token_auth, '')).json()
+    api_get_gare = requests.get('https://data.sncf.com/api/records/1.0/search/?dataset=referentiel-gares-voyageurs', auth=(token_auth, '')).json()
 
     tabgare = []
     n = len(api_get_gare['records'])
