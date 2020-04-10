@@ -69,8 +69,8 @@ def List_Gare() :
     
     
 def Calcul_distance(town1,town2) :
-    url_town1 = 'https://data.sncf.com/api/records/1.0/search/?dataset=referentiel-gares-voyageurs&q=' + town1
-    url_town2 = 'https://data.sncf.com/api/records/1.0/search/?dataset=referentiel-gares-voyageurs&q=' + town2
+    url_town1 = 'https://data.sncf.com/api/records/1.0/search/?dataset=referentiel-gares-voyageurs&q="' + town1+'"'
+    url_town2 = 'https://data.sncf.com/api/records/1.0/search/?dataset=referentiel-gares-voyageurs&q="' + town2+'"'
 
     api_town1 = requests.get(url_town1).json()
     api_town2 = requests.get(url_town2).json()
