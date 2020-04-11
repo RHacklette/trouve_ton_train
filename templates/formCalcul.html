@@ -7,14 +7,14 @@
 <form action="/Calcul" method="post">
     <p>Ville de départ :</p>
     <select name=town1 method="GET">
-        {% for gare in listgare %}
-        <option value= "{{gare}}" SELECTED>{{gare}}</option>"
+        {% for gare in listgare.keys() %}
+        <option value= "{{listgare[gare]}}" SELECTED>{{gare}}</option>"
         {% endfor %}
     </select>
     <p>Ville d'arrivée :</p>
     <select name=town2 method="GET">
         {% for gare in listgare %}
-        <option value= "{{gare}}" SELECTED>{{gare}}</option>"
+        <option value= "{{listgare[gare]}}" SELECTED>{{gare}}</option>"
         {% endfor %}
     </select>
     <p>Jour de départ :</p><input type="date" name="daydepart"><br><br>
