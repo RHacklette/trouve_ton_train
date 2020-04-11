@@ -46,7 +46,7 @@ def Calculsimple():
         
         nexttrain = Next_train(uic1,uic2,datetimesncf)
 
-        return render_template("result.html", result=round(distance,2), prix=round(prixtrajet['prix'],2), devise=devise, tableau=nexttrain)
+        return render_template("result.html", town1=town1, town2=town2, result=round(distance,2), prix=round(prixtrajet['prix'],2), devise=devise, tableau=nexttrain)
     
 @app.route('/Calcul', methods=['GET','POST'])
 def Calcul():
@@ -58,9 +58,19 @@ def Calcul():
         timedepart = result['timedepart']
         devise = result['devise']
         
-        town1 = Get_Name(uic1)
-        town2 = Get_Name(uic2)
-        distance = Calcul_distance(town1,town2)
+        token_auth = '5e044075-940e-4989-87ba-202e60af9e75'
+        url1="https://api.sncf.com/v1/coverage/sncf/stop_areas/"+uic1
+        url2="https://api.sncf.com/v1/coverage/sncf/stop_areas/"+uic2
+        api1 = requests.get(url1, auth=(token_auth, '')).json()
+        api2 = requests.get(url2, auth=(token_auth, '')).json()
+        name1 = api1['stop_areas'][0]['administrative_regions'][0]['name']
+        name2 = api2['stop_areas'][0]['administrative_regions'][0]['name']
+        lat1 = api1['stop_areas'][0]['administrative_regions'][0]['coord']['lat']
+        lon1 = api1['stop_areas'][0]['administrative_regions'][0]['coord']['lon']
+        lat2 = api2['stop_areas'][0]['administrative_regions'][0]['coord']['lat']
+        lon2 = api2['stop_areas'][0]['administrative_regions'][0]['coord']['lon']
+        
+        distance = Calcul_distance_uic(lon1, lon2, lat1, lat2)
         
         http_rest="http://trouve-ton-train-rest.herokuapp.com/CalculPrix"
         response = requests.get( http_rest, params =  {'distance' : float(distance), 'devise' : devise })
@@ -72,7 +82,7 @@ def Calcul():
         
         nexttrain = Next_train(uic1,uic2,datetimesncf)
 
-        return render_template("result.html", result=round(distance,2), prix=round(prixtrajet['prix'],2), devise=devise, tableau=nexttrain)
+        return render_template("result.html", town1=name1, town2=name2, result=round(distance,2), prix=round(prixtrajet['prix'],2), devise=devise, tableau=nexttrain)
 
 def List_Gare() :
     page_initiale = page_gares(0)
@@ -109,10 +119,10 @@ def page_gares(numero_page) :
 def Calcul_distance(town1,town2) :
     url_town1 = 'https://data.sncf.com/api/records/1.0/search/?dataset=referentiel-gares-voyageurs&q="' + town1+'"'
     url_town2 = 'https://data.sncf.com/api/records/1.0/search/?dataset=referentiel-gares-voyageurs&q="' + town2+'"'
-
+    print(url_town2)
     api_town1 = requests.get(url_town1).json()
     api_town2 = requests.get(url_town2).json()
-    
+    print(api_town2)
     lat_town1 = api_town1['records'][0]['fields']['wgs_84'][0]
     long_town1 = api_town1['records'][0]['fields']['wgs_84'][1]
     
@@ -123,20 +133,17 @@ def Calcul_distance(town1,town2) :
     result = client.service.calculDistance(long_town1, long_town2, lat_town1, lat_town2)
     return(result)
     
+def Calcul_distance_uic(long_town1, long_town2, lat_town1, lat_town2) :
+    client = Client('https://trouve-ton-train-java-soap.herokuapp.com/services/TchouTchou?wsdl')
+    result = client.service.calculDistance(long_town1, long_town2, lat_town1, lat_town2)
+    return(result)
+    
 def Get_UIC(town):
     url_town = 'https://data.sncf.com/api/records/1.0/search/?dataset=referentiel-gares-voyageurs&q="' + town+'"'
     api_town = requests.get(url_town).json()
     UIC = api_town['records'][0]['fields']['pltf_uic_code']
     #uic = 'stop_area:OCE:SA:'+str(UIC)
-    return(UIC)
-    
-def Get_Name(UIC):
-    token_auth = '5e044075-940e-4989-87ba-202e60af9e75'
-    url="https://api.sncf.com/v1/coverage/sncf/stop_areas/stop_area:"+UIC
-    api_get_name = requests.get(url, auth=(token_auth, '')).json()
-    name = api_get_name['stop_areas'][0]['administrative_regions'][0]['name']
-    return(name)
-    
+    return(UIC)    
 
 def Next_train(UIC1,UIC2,datetimesncf) :
 
