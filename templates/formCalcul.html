@@ -2,32 +2,47 @@
 <html>
 <head>
 	<title>Formulaire calcul</title>
+    <link rel="stylesheet" type="text/css" href="design.css">
 </head>
 <body>
 <form action="/Calcul" method="post">
-    <p>Ville de départ :</p>
-    <select name=town1 method="GET">
-        {% for gare in listgare.keys() %}
-        <option value= "{{listgare[gare]}}" SELECTED>{{gare}}</option>"
-        {% endfor %}
-    </select>
-    <p>Ville d'arrivée :</p>
-    <select name=town2 method="GET">
-        {% for gare in listgare %}
-        <option value= "{{listgare[gare]}}" SELECTED>{{gare}}</option>"
-        {% endfor %}
-    </select>
-    <p>Jour de départ :</p><input type="date" name="daydepart" value="2020-04-20"><br><br>
-    <label>Heure de départ: </label>
-	<input type="time" name="timedepart" value="13:30"><br><br>
-	<label>Dans quelle devise :</label>
-  	<select name="devise">
-    	<option value="euro">Euros</option>
-    	<option value="gbp">Pounds</option>
-    	<option value="aud">Dollars Australien</option>
-    	<option value="usd">Dollars Americains</option>
-  </select>
-    <input type="submit">
+    <div class="bloc">
+        <div class="town1">
+            <p>Ville de départ :</p>
+            <select name="town1" method="GET">
+                {% for gare in listgare.keys() %}
+                <option value= "{{listgare[gare]}}" SELECTED>{{gare}}</option>"
+                {% endfor %}
+            </select>
+        </div>
+        <div class="town2">
+            <p>Ville d'arrivée :</p>
+            <select name="town2" method="GET">
+                {% for gare in listgare %}
+                <option value= "{{listgare[gare]}}" SELECTED>{{gare}}</option>"
+                {% endfor %}
+            </select>
+        </div>
+        <div class="daydepart">
+            <p>Jour de départ :</p><input type="date" name="daydepart" value="2020-04-20"><br><br>
+        </div>
+        <div class="timedepart">
+            <label>Heure de départ: </label>
+    	    <input type="time" name="timedepart" value="13:30"><br><br>
+        </div>
+        <div class="devise">
+        	<label>Dans quelle devise :</label>
+          	<select name="devise">
+            	<option value="euro">Euros</option>
+            	<option value="gbp">Pounds</option>
+            	<option value="aud">Dollars Australien</option>
+            	<option value="usd">Dollars Americains</option>
+            </select>
+        </div>
+        <div class="submit">
+            <input type="submit">
+        </div>
+    </div>
 </form>
 </body>
 </html>

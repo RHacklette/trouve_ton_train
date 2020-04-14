@@ -2,22 +2,37 @@
 <html>
 <head>
 	<title>Formulaire calcul</title>
+    <link rel="stylesheet" type="text/css" href="design.css">
 </head>
 <body>
 <form action="/Calculsimple" method="post">
-    <p>Ville de départ :</p><input type="text" name="town1"><br><br>
-    <p>Ville d'arrivée :</p><input type="town2" name="town2"><br><br>
-    <p>Jour de départ :</p><input type="date" name="daydepart" value="2020-04-20"><br><br>
-    <label>Heure de départ: </label>
-	<input type="time" name="timedepart" value="13:30"><br><br>
-	<label>Dans quelle devise :</label>
-  	<select name="devise">
-    	<option value="euro">Euros</option>
-    	<option value="gbp">Pounds</option>
-    	<option value="aud">Dollars Australien</option>
-    	<option value="usd">Dollars Americains</option>
-  </select>
-    <input type="submit">
+    <div class="bloc">
+        <div class="town1">
+            <p>Ville de départ :</p><input type="text" name="town1" placeholder="Exemple : Paris">
+        </div>
+        <div class="town2">
+            <p>Ville d'arrivée :</p><input type="town2" name="town2" placeholder="Exemple : Marseille">
+        </div>
+        <div class="daydepart">
+            <p>Jour de départ :</p><input type="date" name="daydepart" value="2020-04-20"><br><br>
+        </div>
+        <div class="timedepart">
+            <label>Heure de départ: </label>
+            <input type="time" name="timedepart" value="13:30"><br><br>
+        </div>
+        <div class="devise">
+            <label>Dans quelle devise :</label>
+            <select name="devise">
+                <option value="euro">Euros</option>
+                <option value="gbp">Pounds</option>
+                <option value="aud">Dollars Australien</option>
+                <option value="usd">Dollars Americains</option>
+            </select>
+        </div>
+        <div class="submit">
+            <input type="submit">
+        </div>
+    </div>
 </form>
 </body>
 </html>

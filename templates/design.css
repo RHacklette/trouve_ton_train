@@ -1,0 +1,43 @@
+.bloc{
+	position: relative;
+}
+
+.town1{
+	position: absolute;
+	padding-top: 1%;
+	left: 2%;
+	width: 30%;
+}
+
+.town2{
+	position: absolute;
+	padding-top: 1%;
+	left: 30%;
+	width: 30%;
+}
+
+.daydepart{
+	position: absolute;
+	padding-top: 6%;
+	left: 2%;
+}
+
+.timedepart{
+	position: absolute;
+	padding-top: 7%;
+	left: 30%;
+	width: 20%;
+}
+
+.devise{
+	position: absolute;
+	padding-top: 12%;
+	left: 2%;
+
+}
+
+.submit{
+	position: absolute;
+	padding-top: 15%;
+	left: 2%;
+}
